@@ -61,8 +61,10 @@ class Navbar extends Component {
           <Space className="top-nav-right">
             <div>{`Good Morning, ${userData.name}!`}</div>
             <Avatar
-              src={userData.picture_url}
-              alt="U"
+              src={
+                userData.picture_url ||
+                "https://3.bp.blogspot.com/-qDc5kIFIhb8/UoJEpGN9DmI/AAAAAAABl1s/BfP6FcBY1R8/s1600/BlueHead.jpg"
+              }
               className="avatar"
               size="large"
               onClick={() => history.push("/my-profile")}

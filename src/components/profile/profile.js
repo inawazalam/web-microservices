@@ -19,8 +19,6 @@ import {
   Input,
 } from "antd";
 import {
-  PlusOutlined,
-  LoadingOutlined,
   EditOutlined,
   MoreOutlined,
   CameraOutlined,
@@ -62,11 +60,11 @@ const Profile = (props) => {
       </Menu>
     );
   };
-
   return (
     <Layout className="page-container">
       <PageHeader title="Your Profile" className="profile-header" />
       <Content>
+        {/* <img src={img} width="50%"/> */}
         <Card>
           <Meta
             description={(
@@ -94,7 +92,10 @@ const Profile = (props) => {
                     <Avatar
                       shape="square"
                       size={200}
-                      src={userData.picture_url}
+                      src={
+                        userData.picture_url ||
+                        "https://3.bp.blogspot.com/-qDc5kIFIhb8/UoJEpGN9DmI/AAAAAAABl1s/BfP6FcBY1R8/s1600/BlueHead.jpg"
+                      }
                     />
                   </Badge>
                 </Col>

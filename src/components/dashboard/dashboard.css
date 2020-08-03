@@ -1,5 +1,5 @@
 .ant-avatar img{
-  object-fit: fill;
+  object-fit: scale-down;
 }
 
 .affix-button{
@@ -38,4 +38,24 @@
 
 .map-iframe{
   border: 0;
+}
+
+.alert-msg-box{
+  margin: auto;
+  text-align: center;
+}
+
+.alert-msg-box .btn{
+  color: blue;
+  background-color: transparent;
+  border: none;
+}
+
+.alert-header{
+  font-size: larger;
+  font-weight: bold;
+}
+
+.alert-msg{
+  font-size: large;
 }

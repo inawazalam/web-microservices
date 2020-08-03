@@ -88,9 +88,6 @@ const ProfileContainer = (props) => {
     changeVideoName({ callback, accessToken, ...values });
   };
 
-  const openNewPost = () =>
-    history.push(`/new-post?content=${userData.video_url}`);
-
   const shareVideoWithCommunity = () => {
     const callback = (res, data) => {
       setIsFetching(false);
@@ -99,15 +96,11 @@ const ProfileContainer = (props) => {
         Modal.success({
           title: "Success",
           content: data,
-          onOk: openNewPost,
-          onCancel: openNewPost,
         });
       } else {
         Modal.error({
           title: "Failure",
           content: data,
-          onOk: openNewPost,
-          onCancel: openNewPost,
         });
       }
     };

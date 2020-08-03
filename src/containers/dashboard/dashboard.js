@@ -6,11 +6,18 @@ import { Spin, Modal } from "antd";
 import {
   getVehiclesAction,
   refreshLocationAction,
+  resendMailAction,
 } from "../../actions/userActions";
 import Dashboard from "../../components/dashboard/dashboard";
 
 const DashboardContainer = (props) => {
-  const { history, accessToken, getVehicles, refreshLocation } = props;
+  const {
+    history,
+    accessToken,
+    getVehicles,
+    resendMail,
+    refreshLocation,
+  } = props;
 
   const [isFetching, setIsFetching] = useState(false);
   const [vehicles, setVehicles] = useState([]);
@@ -53,12 +60,32 @@ const DashboardContainer = (props) => {
     refreshLocation({ callback, accessToken, carId });
   };
 
+  const handleResendMail = () => {
+    const callback = (res, data) => {
+      setIsFetching(false);
+      if (res === "success") {
+        Modal.success({
+          title: "Success",
+          content: data,
+        });
+      } else {
+        Modal.error({
+          title: "Failed",
+          content: data,
+        });
+      }
+    };
+    setIsFetching(true);
+    resendMail({ callback, accessToken });
+  };
+
   return (
     <Spin spinning={isFetching} className="spinner">
       <Dashboard
         history={history}
         vehicles={vehicles}
         refreshLocation={handleRefreshLocation}
+        resendMail={handleResendMail}
       />
     </Spin>
   );
@@ -71,11 +98,13 @@ const mapStateToProps = ({ userReducer: { accessToken } }) => {
 const mapDispatchToProps = {
   getVehicles: getVehiclesAction,
   refreshLocation: refreshLocationAction,
+  resendMail: resendMailAction,
 };
 
 DashboardContainer.propTypes = {
   accessToken: PropTypes.string,
   getVehicles: PropTypes.func,
+  resendMail: PropTypes.func,
   refreshLocation: PropTypes.func,
   history: PropTypes.object,
 };

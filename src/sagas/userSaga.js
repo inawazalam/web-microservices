@@ -157,7 +157,10 @@ export function* verifyOTP(param) {
     if (recievedResponse.ok) {
       callback("success");
     } else {
-      callback("error", responseJSON.message);
+      if (recievedResponse.status === 503)
+        callback("redirect", responseJSON.message);
+      else  
+        callback("error", responseJSON.message);
     }
   } catch (e) {
     callback("error", "Could not verify OTP");
@@ -268,9 +271,9 @@ export function* verifyToken(param) {
     });
 
     if (recievedResponse.ok) {
-      callback("success", responseJSON);
+      callback("success", responseJSON.message);
     } else {
-      callback("failure", responseJSON.error);
+      callback("failure", responseJSON.message);
     }
   } catch (e) {
     callback("failure", "Could not change email id");
@@ -647,11 +650,10 @@ export function* uploadProfilePic(param) {
       recievedResponse = response;
       return response.json();
     });
-
     if (recievedResponse.ok) {
       yield put({
         type: actionLoginTypes.PROFILE_PIC_CHANGED,
-        payload: { profilePicUrl: ResponseJson.message },
+        payload: { profilePicUrl: ResponseJson.picture },
       });
       callback("success", ResponseJson.message);
     } else {
@@ -692,7 +694,7 @@ export function* uploadVideo(param) {
     if (recievedResponse.ok) {
       yield put({
         type: actionLoginTypes.VIDEO_CHANGED,
-        payload: { videoUrl: ResponseJson.message },
+        payload: { videoUrl: ResponseJson.profileVideo },
       });
       callback("success", ResponseJson.message);
     } else {
@@ -722,7 +724,7 @@ export function* changeVideoName(param) {
     };
     const ResponseJson = yield fetch(getUrl, {
       headers,
-      method: "POST",
+      method: "PUT",
       body: JSON.stringify({ videoName }),
     }).then((response) => {
       recievedResponse = response;
@@ -740,6 +742,39 @@ export function* changeVideoName(param) {
     }
   } catch (e) {
     callback("failure", "Could not change video");
+  }
+}
+
+/**
+ * resend vehicle details
+ * @param { accessToken, callback } param
+ * accessToken: access token of the user
+ * callback : callback method
+ */
+export function* resendMail(param) {
+  const { accessToken, callback } = param;
+  try {
+    let recievedResponse = {};
+    const getUrl = APIService.USER_MICRO_SERVICES + requestURLS.RESEND_MAIL;
+    const headers = {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${accessToken}`,
+    };
+    const ResponseJson = yield fetch(getUrl, {
+      headers,
+      method: "GET",
+    }).then((response) => {
+      recievedResponse = response;
+      return response.json();
+    });
+
+    if (recievedResponse.ok) {
+      callback("success", ResponseJson.message);
+    } else {
+      callback("failure", ResponseJson.message);
+    }
+  } catch (e) {
+    callback("failure", "Internal Error");
   }
 }
 
@@ -981,7 +1016,7 @@ export function* convertVideo(param) {
       "Content-Type": "application/json",
       Authorization: `Bearer ${accessToken}`,
     };
-    const ResponseJson = yield fetch(`${getUrl}?video_id=${1}`, {
+    const ResponseJson = yield fetch(`${getUrl}?video_id=${159}`, {
       headers,
       method: "GET",
     }).then((response) => {
@@ -992,7 +1027,7 @@ export function* convertVideo(param) {
     if (recievedResponse.ok) {
       callback("success", ResponseJson.message);
     } else {
-      callback("failure", ResponseJson.message);
+      callback("failure", "Could not convert video");
     }
   } catch (e) {
     callback("failure", "Could not convert video");
@@ -1008,6 +1043,7 @@ export function* userActionWatcher() {
   yield takeLatest(actionLoginTypes.CHANGE_EMAIL, changeEmail);
   yield takeLatest(actionLoginTypes.VERIFY_TOKEN, verifyToken);
   yield takeLatest(actionLoginTypes.VERIFY_VEHICLE, verifyVehicle);
+  yield takeLatest(actionLoginTypes.RESEND_MAIL, resendMail);
   yield takeLatest(actionLoginTypes.GET_MECHANICS, getMechanics);
   yield takeLatest(actionLoginTypes.GET_SERVICES, getServices);
   yield takeLatest(actionLoginTypes.GET_VEHICLES, getVehicles);

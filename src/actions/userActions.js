@@ -102,6 +102,14 @@ export const getVehiclesAction = ({ callback, accessToken, email }) => {
   };
 };
 
+export const resendMailAction = ({ callback, accessToken }) => {
+  return {
+    type: actionLoginTypes.RESEND_MAIL,
+    accessToken,
+    callback,
+  };
+};
+
 export const contactMechanicAction = ({ callback, accessToken, ...data }) => {
   return {
     type: actionLoginTypes.CONTACT_MECHANIC,

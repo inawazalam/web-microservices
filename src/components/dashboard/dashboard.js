@@ -1,6 +1,6 @@
 import "./dashboard.css";
 
-import React from "react";
+import React, { Fragment } from "react";
 import PropTypes from "prop-types";
 import {
   PageHeader,
@@ -11,6 +11,7 @@ import {
   Avatar,
   Descriptions,
   Layout,
+  Alert,
 } from "antd";
 import { ToolOutlined, SyncOutlined, PlusOutlined } from "@ant-design/icons";
 
@@ -40,11 +41,7 @@ const vehicleCardContent = (vehicle, refreshLocation) => (
   <>
     <Row gutter={[20, 20]}>
       <Col flex="420px">
-        <Avatar
-          shape="square"
-          size={400}
-          src={vehicle.model.vehicle_img}
-        />
+        <Avatar shape="square" size={400} src={vehicle.model.vehicle_img} />
       </Col>
       <Col flex="auto">
         <Descriptions size="large" column={1} className="vehicle-desc" bordered>
@@ -90,7 +87,7 @@ const vehicleCardContent = (vehicle, refreshLocation) => (
 );
 
 const Dashboard = (props) => {
-  const { vehicles, history, refreshLocation } = props;
+  const { vehicles, history, refreshLocation, resendMail } = props;
   return (
     <Layout className="page-container">
       <PageHeader
@@ -123,6 +120,32 @@ const Dashboard = (props) => {
               </Card>
             </Col>
           ))}
+          {!vehicles.length && (
+            <Col className="alert-msg-box">
+              <Alert
+                message={<span className="alert-header">No Vehicles Found</span>}
+                description={(
+                  <>
+                    <span className="alert-msg">
+                      Please check your email for the VIN and PIN code of your
+                      vehicle.
+                    </span>
+                    <button
+                      onClick={resendMail}
+                      type="button"
+                      className="alert-msg btn"
+                    >
+                      {" Click here "}
+                    </button>
+                    <span className="alert-msg">
+                      to send the information again
+                    </span>
+                  </>
+                )}
+                type="warning"
+              />
+            </Col>
+          )}
         </Row>
       </Content>
     </Layout>
@@ -132,6 +155,7 @@ const Dashboard = (props) => {
 Dashboard.propTypes = {
   history: PropTypes.object,
   vehicles: PropTypes.array,
+  resendMail: PropTypes.func,
   refreshLocation: PropTypes.func,
 };
 

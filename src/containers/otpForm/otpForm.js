@@ -18,6 +18,13 @@ const OtpFormContainer = (props) => {
         content: "Your password has been set.",
         onOk: () => props.history.push("/login"),
       });
+    } else if (res === "redirect") {
+      Modal.error({
+        title: "Failure",
+        content: data,
+        onOk: () => props.history.push("/login"),
+        onCancel: () => props.history.push("/login"),
+      });
     } else {
       setHasErrored(true);
       setErrorMessage(data);

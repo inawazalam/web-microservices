@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: react-deploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: react
+  template:
+    metadata:
+      labels:
+        app: react
+    spec:
+      containers:
+      - name: react
+        image: localhost:5000/web-final:v1
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+        resources:
+          limits:
+            cpu: "500m"
+          requests:
+            cpu: 256m
+        volumeMounts:
+        - name: react-configmap-volume
+          mountPath: /usr/share/nginx/html/config.js
+          subPath: config.js
+      volumes:
+      - name: react-configmap-volume
+        configMap:
+          name: react-configmap

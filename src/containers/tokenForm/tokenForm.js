@@ -15,7 +15,7 @@ const TokenFormContainer = (props) => {
     if (res === "success") {
       Modal.success({
         title: "Token Verified",
-        content: `Message: ${data.message}`,
+        content: data,
         onOk: () => {
           props.logOutUser({
             callback: () => {
