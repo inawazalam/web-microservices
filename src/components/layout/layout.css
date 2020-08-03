@@ -1,0 +1,24 @@
+.layoutContainer {
+  min-height: 100vh;
+  margin-left: auto;
+  margin-right: auto;
+}
+.layoutNavContainer {
+  height: 100%;
+  position: fixed;
+
+  background-color: #211d70;
+  width: 6%;
+}
+.mainContentContainer {
+  width: 100vw;
+}
+
+.contentBody{
+  background-color: #8080800f;
+  min-height: 91vh;
+}
+
+.layout-content{
+  padding: 0 50px;
+}
